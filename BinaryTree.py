@@ -14,10 +14,12 @@
 
 # A Binary Tree is a full binary tree if every node has 0 or 2 children.
 
+#  Blace Binary Tree = difference between left and right subtrees should not grater then 1 
 
 
 
 import queue
+from tkinter.tix import Tree
 
 
 class Node:
@@ -213,8 +215,41 @@ def leftView1(node,currentlevel):
     leftView1(node.right,currentlevel+1)
 
 
+def childrenSum(node):
+    if node == None or (node.left == None and node.right == None):
+        return True
+    sum=0
+    if node.left != None:
+        sum+=node.left.data
+    if node.right != None:
+        sum+=node.right.data
+    return (node.data==sum and childrenSum(node.left) and childrenSum(node.right))
+
+def isBlanced(node): # O(n^2)
+    if node is None:
+        return True
+    lh=heightTree(node.left)
+    rh=heightTree(node.right)
+    return (abs(lh-rh)<=1) and isBlanced(node.left) and isBlanced(node.right)   
+
+def isBlanced1(node): # O(n)
+    if node is None:
+        return 0
+    lh=isBlanced(node.left)
+    if lh==-1:
+        return -1
+    rh=isBlanced(node.right)
+    if rh==-1:
+        return -1
+    if abs(lh-rh)>1:
+        return -1
+    else:
+        return max(lh,rh)+1
+    
+
         
 if __name__ =='__main__':
+
     
     root=Node(10)
     
@@ -261,8 +296,32 @@ if __name__ =='__main__':
     leftView(root)
     print('\nLeft view of the binary tree method 2: ')
     leftView1(root,1)
-    print()
+    print("\nThis Binary Tree follows Children Sum Property: ",childrenSum(root))
+    print("\nThis Binary Tree follows the Property of Blanced BinaryTree method1: ",isBlanced(root))
+    ans=True
+    if isBlanced1(root)==-1:
+        ans=False
+    else:
+        ans=True
+
+    print("\nThis Binary Tree follows the Property of Blanced BinaryTree method2: ",ans)
+
+    print("\n")
+
 
 
 
     
+
+
+
+
+
+
+
+
+    # root =Node(20)
+    # root.left=Node(8)
+    # root.right=Node(12)
+    # root.right.left=Node(3)
+    # root.right.right=Node(8)
