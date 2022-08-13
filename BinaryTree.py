@@ -18,10 +18,6 @@
 
 
 
-import queue
-from tkinter.tix import Tree
-
-
 class Node:
     def __init__(self,key):
         self.left=None
@@ -245,6 +241,60 @@ def isBlanced1(node): # O(n)
         return -1
     else:
         return max(lh,rh)+1
+
+
+def widthofTree(node):
+    if node is None:
+        return
+    queue = []
+    queue.append(node)
+    maxsize=0
+    while queue:
+        size=len(queue)
+        maxsize=max(maxsize,size)
+        for i in range(size):
+            current=queue.pop(0)
+            if current.left != None:
+                queue.append(current.left)
+            if current.right != None:
+                queue.append(current.right)
+    return maxsize
+
+def spiralLevelOrder(node):
+    if node is None:
+        return
+    queue = []
+    tempdata=[]
+    tempindex = []
+    queue.append(node)
+
+    while queue:
+        size=len(queue)
+        tempindex.append(size)
+        for i in range(size):
+            current=queue.pop(0)
+            tempdata.append(current.data)
+            if current.left != None:
+                queue.append(current.left)
+            if current.right != None:
+                queue.append(current.right)
+
+    mini=0
+    Bool=True
+    while tempindex:
+        maxi=tempindex.pop(0)
+        if Bool:
+            for i in tempdata[mini:mini+maxi]:
+                print(i,end=" ")
+            Bool=False
+        else:
+            for i in reversed(tempdata[mini:mini+maxi]):
+                print(i,end=" ")
+            Bool=True
+        mini+=maxi
+
+
+    
     
 
         
@@ -305,6 +355,9 @@ if __name__ =='__main__':
         ans=True
 
     print("\nThis Binary Tree follows the Property of Blanced BinaryTree method2: ",ans)
+    print("\nWidth of the BinaryTree method2: ",widthofTree(root))
+    print("\nSprial Level Order traversal: ",end=" ")
+    spiralLevelOrder(root)
 
     print("\n")
 
