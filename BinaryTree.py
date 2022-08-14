@@ -16,6 +16,8 @@
 
 #  Blace Binary Tree = difference between left and right subtrees should not grater then 1 
 
+# Diameter Binary Tree = number of nodes of the longest path between two leaf nodes
+
 
 
 class Node:
@@ -293,9 +295,58 @@ def spiralLevelOrder(node):
             Bool=True
         mini+=maxi
 
+res=0
+def diameterTree(node):
+    if node==None:
+        return 0
+    global res
+    lh=diameterTree(node.left)
+    rh=diameterTree(node.right)
+    res=max(res,1+lh+rh)
+    return 1+max(lh,rh)
 
+
+def pathis(node, path, element):
+    if node ==None:
+        return False
+    path.append(node.data)
+    if node.data==element:
+        return True
+    if pathis(node.left,path,element) or pathis(node.right,path,element):
+        return True
+
+    path.pop()
+
+    return False
+
+def Lca(node,n,m):
+    path1,path2=[],[]
+    pathis(node,path1,n)
+    pathis(node,path2,m)
+    i=0
+    while i<len(path1)-1 and i<len(path2)-1:
+        if path1[i+1]!=path2[i+1]:
+            return path1[i]
+        i+=1
+
+    return None
+
+def Lca2(node,n,m):
+    if node == None:
+        return None
     
-    
+    if node.data == n or node.data == m:
+        return node
+    lca1=Lca2(node.left,n,m)
+    lca2=Lca2(node.right,n,m)
+
+    if lca1 != None and lca2 != None:
+        return node
+
+    if lca1 != None:
+        return  lca1
+    else:
+        return lca2
 
         
 if __name__ =='__main__':
@@ -349,16 +400,22 @@ if __name__ =='__main__':
     print("\nThis Binary Tree follows Children Sum Property: ",childrenSum(root))
     print("\nThis Binary Tree follows the Property of Blanced BinaryTree method1: ",isBlanced(root))
     ans=True
-    if isBlanced1(root)==-1:
+    if isBlanced1(root) == -1:
         ans=False
     else:
         ans=True
 
     print("\nThis Binary Tree follows the Property of Blanced BinaryTree method2: ",ans)
-    print("\nWidth of the BinaryTree method2: ",widthofTree(root))
+    print("\nWidth of the BinaryTree method: ",widthofTree(root))
     print("\nSprial Level Order traversal: ",end=" ")
     spiralLevelOrder(root)
-
+    diameterTree(root)
+    print("\nDiameter of the BinaryTree: ",res)
+    n,m=input('Enter two nodes value for LCA: ').split()
+    n=int(n)
+    m=int(m)
+    print("Lowest common ansester method1: ",Lca(root,n,m))
+    print("Lowest common ansester method2: ",Lca2(root,n,m).data,end='')
     print("\n")
 
 
